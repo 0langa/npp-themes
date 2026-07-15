@@ -25,6 +25,9 @@ bool ShellBridge::apply(const ShellPalette& palette) noexcept {
     if (window_ == nullptr || getAttribute_ == nullptr || setAttribute_ == nullptr || highContrastActive_ == nullptr) {
         return false;
     }
+    if (!validateShellPalette(palette).empty()) {
+        return false;
+    }
     if (highContrastActive_()) {
         restore();
         return false;

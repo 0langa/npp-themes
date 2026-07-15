@@ -139,12 +139,25 @@ void testPartialFailureAndHighContrastTransitionRestore() {
           "high contrast transition restores captured native frame");
 }
 
+void testUnsafePaletteRejectedBeforeHostMutation() {
+    using namespace nppthemes;
+    using namespace nppthemes::plugin;
+    resetFakeState();
+    auto unsafe = deriveShellPalette(builtInProfiles().front());
+    unsafe.captionForeground = unsafe.captionBackground;
+    ShellBridge bridge(fakeGet, fakeSet, highContrast);
+    bridge.setHostWindow(reinterpret_cast<HWND>(static_cast<std::uintptr_t>(1)));
+    check(!bridge.apply(unsafe), "unsafe shell palette is rejected");
+    check(getCalls == 0 && setCalls == 0, "unsafe shell palette cannot reach host mutation boundary");
+}
+
 } // namespace
 
 int main() {
     testApplyUpdateAndRestore();
     testUnsupportedAndHighContrastFailClosed();
     testPartialFailureAndHighContrastTransitionRestore();
+    testUnsafePaletteRejectedBeforeHostMutation();
     if (failures == 0) {
         std::cout << "All NppThemes shell bridge tests passed\n";
         return 0;

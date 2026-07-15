@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "nppthemes/ThemeProfile.h"
@@ -69,5 +70,7 @@ struct ShellPalette {
 [[nodiscard]] Color blendColors(Color first, Color second, double secondWeight) noexcept;
 [[nodiscard]] ShellPalette deriveShellPalette(const ThemeProfile& profile) noexcept;
 [[nodiscard]] std::vector<std::string> validateShellPalette(const ShellPalette& palette);
+[[nodiscard]] bool isShellColorRole(std::string_view role) noexcept;
+[[nodiscard]] std::string serializeShellPalette(const ShellPalette& palette);
 
 } // namespace nppthemes

@@ -12,6 +12,7 @@ NppThemes is a native appearance and workspace modernization plugin for Notepad+
 - Contrast-aware palette editing for background, foreground, accent, keyword, string, and comment roles.
 - Font family and size customization.
 - Versioned JSON import/export with input limits and validation.
+- Backward-compatible profile v2 shell preferences and individually overridable semantic shell roles.
 - Native Notepad++ theme XML generation that preserves unknown lexers and style nodes.
 - Reversible Focus and Minimal workspace profiles using documented host messages.
 - Searchable command palette for commands, themes, and open documents in both views.
@@ -63,6 +64,7 @@ Plugins Admin distribution follows after public beta compatibility data is suffi
 
 See [User Guide](docs/user-guide/README.md), including recovery instructions and known limitations.
 Dedicated references: [Recovery and rollback](docs/recovery.md) and [Threat model](docs/threat-model.md).
+Theme contract: [Profile schema v2](docs/profile-schema-v2.md).
 
 ## Build and test
 

@@ -7,6 +7,7 @@ All notable changes use [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ### Added
 
 - Shared semantic `ShellPalette` derivation with contrast validation and deterministic tests for every built-in profile.
+- Profile schema v2 migration, per-role shell color overrides, density and shell typography preferences, plus a canonical cross-host conformance executable.
 - Opt-in, capability-checked DWM title-bar, caption-text, and border theming with transactional restore, High Contrast precedence, Theme Studio status, and settings persistence.
 - Complete plugin-plus-maintained-shell development roadmap for full application-owned window theming.
 

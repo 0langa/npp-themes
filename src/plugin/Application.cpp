@@ -297,7 +297,6 @@ void Application::cancelPreview() {
 }
 
 void Application::applyCustomProfile(ThemeProfile profile) {
-    profile.schemaVersion = 1;
     profile.id = "user.custom";
     if (profile.name.empty()) {
         profile.name = "Custom";

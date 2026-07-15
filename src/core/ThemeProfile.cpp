@@ -12,6 +12,8 @@
 
 #include <nlohmann/json.hpp>
 
+#include "nppthemes/ShellPalette.h"
+
 namespace nppthemes {
 namespace {
 
@@ -358,6 +360,31 @@ void paletteToJson(json& target, const Palette& palette) {
     };
 }
 
+[[nodiscard]] const char* densityName(ShellDensity density) noexcept {
+    switch (density) {
+    case ShellDensity::Compact:
+        return "compact";
+    case ShellDensity::Touch:
+        return "touch";
+    case ShellDensity::Comfortable:
+    default:
+        return "comfortable";
+    }
+}
+
+[[nodiscard]] ShellDensity densityFromName(std::string_view value) {
+    if (value == "compact") {
+        return ShellDensity::Compact;
+    }
+    if (value == "comfortable") {
+        return ShellDensity::Comfortable;
+    }
+    if (value == "touch") {
+        return ShellDensity::Touch;
+    }
+    throw std::invalid_argument("shell.density must be compact, comfortable, or touch");
+}
+
 } // namespace
 
 std::vector<ThemeProfile> builtInProfiles() {
@@ -460,8 +487,8 @@ double contrastRatio(Color foreground, Color background) {
 
 std::vector<std::string> validateProfile(const ThemeProfile& profile) {
     std::vector<std::string> errors;
-    if (profile.schemaVersion != 1) {
-        errors.emplace_back("schemaVersion must be 1");
+    if (profile.schemaVersion != 1 && profile.schemaVersion != 2) {
+        errors.emplace_back("schemaVersion must be 1 or 2");
     }
     if (profile.id.size() > 128 || !validIdentifier(profile.id)) {
         errors.emplace_back("id must contain 1-128 ASCII letters, digits, dots, underscores, or hyphens");
@@ -475,19 +502,61 @@ std::vector<std::string> validateProfile(const ThemeProfile& profile) {
     if (profile.fontSizePt < 6 || profile.fontSizePt > 48) {
         errors.emplace_back("fontSizePt must be between 6 and 48");
     }
+    if (profile.schemaVersion == 1 && profile.shell) {
+        errors.emplace_back("schemaVersion 1 cannot contain shell settings");
+    }
+    if (profile.schemaVersion == 2 && !profile.shell) {
+        errors.emplace_back("schemaVersion 2 requires shell settings");
+    }
+    if (profile.shell) {
+        if (profile.shell->fontFamily.empty() || profile.shell->fontFamily.size() > 128 ||
+            hasControlCharacters(profile.shell->fontFamily)) {
+            errors.emplace_back("shell fontFamily must contain 1-128 characters");
+        }
+        if (profile.shell->fontSizePt < 6 || profile.shell->fontSizePt > 48) {
+            errors.emplace_back("shell fontSizePt must be between 6 and 48");
+        }
+        if (profile.shell->colorOverrides.size() > 45) {
+            errors.emplace_back("shell colors cannot contain more than 45 roles");
+        }
+        for (const auto& [role, color] : profile.shell->colorOverrides) {
+            static_cast<void>(color);
+            if (!isShellColorRole(role)) {
+                errors.emplace_back("unknown shell color role: " + role);
+            }
+        }
+    }
     if (contrastRatio(profile.palette.foreground, profile.palette.background) < 3.0) {
         errors.emplace_back("foreground/background contrast must be at least 3.0:1");
     }
     if (contrastRatio(profile.palette.caret, profile.palette.background) < 3.0) {
         errors.emplace_back("caret/background contrast must be at least 3.0:1");
     }
+    if (profile.schemaVersion == 2 && profile.shell) {
+        for (const auto& shellError : validateShellPalette(deriveShellPalette(profile))) {
+            errors.emplace_back("shell palette: " + shellError);
+        }
+    }
     return errors;
+}
+
+ThemeProfile migrateProfileToV2(const ThemeProfile& profile) {
+    const auto errors = validateProfile(profile);
+    if (!errors.empty()) {
+        throw std::invalid_argument(errors.front());
+    }
+    ThemeProfile migrated = profile;
+    migrated.schemaVersion = 2;
+    if (!migrated.shell) {
+        migrated.shell = ShellSettings{};
+    }
+    return migrated;
 }
 
 std::string serializeProfile(const ThemeProfile& profile) {
     json palette;
     paletteToJson(palette, profile.palette);
-    const json document = {
+    json document = {
         {"schemaVersion", profile.schemaVersion},
         {"id", profile.id},
         {"name", profile.name},
@@ -495,6 +564,17 @@ std::string serializeProfile(const ThemeProfile& profile) {
         {"palette", palette},
         {"typography", {{"fontFamily", profile.fontFamily}, {"fontSizePt", profile.fontSizePt}}},
     };
+    if (profile.schemaVersion == 2 && profile.shell) {
+        json colors = json::object();
+        for (const auto& [role, color] : profile.shell->colorOverrides) {
+            colors[role] = formatHexColor(color);
+        }
+        document["shell"] = {
+            {"density", densityName(profile.shell->density)},
+            {"typography", {{"fontFamily", profile.shell->fontFamily}, {"fontSizePt", profile.shell->fontSizePt}}},
+            {"colors", std::move(colors)},
+        };
+    }
     return document.dump(2) + '\n';
 }
 
@@ -519,6 +599,24 @@ ThemeProfile deserializeProfile(std::string_view jsonText) {
     profile.palette = paletteFromJson(document.at("palette"));
     profile.fontFamily = document.at("typography").at("fontFamily").get<std::string>();
     profile.fontSizePt = document.at("typography").at("fontSizePt").get<int>();
+    if (profile.schemaVersion == 2) {
+        const auto& shell = document.at("shell");
+        ShellSettings settings;
+        settings.density = densityFromName(shell.at("density").get<std::string>());
+        settings.fontFamily = shell.at("typography").at("fontFamily").get<std::string>();
+        settings.fontSizePt = shell.at("typography").at("fontSizePt").get<int>();
+        for (const auto& [role, encoded] : shell.at("colors").items()) {
+            if (!isShellColorRole(role)) {
+                throw std::invalid_argument("unknown shell color role: " + role);
+            }
+            const auto color = parseHexColor(encoded.get<std::string>());
+            if (!color) {
+                throw std::invalid_argument("invalid shell color role: " + role);
+            }
+            settings.colorOverrides.emplace(role, *color);
+        }
+        profile.shell = std::move(settings);
+    }
 
     const auto errors = validateProfile(profile);
     if (!errors.empty()) {

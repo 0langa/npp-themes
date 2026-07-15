@@ -4,10 +4,66 @@
 #include <array>
 #include <cmath>
 #include <string>
+#include <string_view>
 #include <utility>
+
+#include <nlohmann/json.hpp>
 
 namespace nppthemes {
 namespace {
+
+struct RoleBinding {
+    std::string_view name;
+    Color ShellPalette::* member;
+};
+
+constexpr std::array<RoleBinding, 45> shellColorRoles = {
+    RoleBinding{"shell.window.background", &ShellPalette::windowBackground},
+    RoleBinding{"shell.surface.primary", &ShellPalette::surfacePrimary},
+    RoleBinding{"shell.surface.secondary", &ShellPalette::surfaceSecondary},
+    RoleBinding{"shell.surface.raised", &ShellPalette::surfaceRaised},
+    RoleBinding{"shell.border", &ShellPalette::border},
+    RoleBinding{"shell.divider", &ShellPalette::divider},
+    RoleBinding{"shell.focusRing", &ShellPalette::focusRing},
+    RoleBinding{"shell.caption.background", &ShellPalette::captionBackground},
+    RoleBinding{"shell.caption.foreground", &ShellPalette::captionForeground},
+    RoleBinding{"shell.caption.inactiveForeground", &ShellPalette::captionInactiveForeground},
+    RoleBinding{"shell.menu.background", &ShellPalette::menuBackground},
+    RoleBinding{"shell.menu.foreground", &ShellPalette::menuForeground},
+    RoleBinding{"shell.menu.hotBackground", &ShellPalette::menuHotBackground},
+    RoleBinding{"shell.menu.disabledForeground", &ShellPalette::menuDisabledForeground},
+    RoleBinding{"shell.toolbar.background", &ShellPalette::toolbarBackground},
+    RoleBinding{"shell.toolbar.hover", &ShellPalette::toolbarHover},
+    RoleBinding{"shell.toolbar.pressed", &ShellPalette::toolbarPressed},
+    RoleBinding{"shell.toolbar.separator", &ShellPalette::toolbarSeparator},
+    RoleBinding{"shell.tab.active", &ShellPalette::tabActive},
+    RoleBinding{"shell.tab.inactive", &ShellPalette::tabInactive},
+    RoleBinding{"shell.tab.hover", &ShellPalette::tabHover},
+    RoleBinding{"shell.tab.foreground", &ShellPalette::tabForeground},
+    RoleBinding{"shell.tab.dirty", &ShellPalette::tabDirty},
+    RoleBinding{"shell.tab.closeHover", &ShellPalette::tabCloseHover},
+    RoleBinding{"shell.status.background", &ShellPalette::statusBackground},
+    RoleBinding{"shell.status.foreground", &ShellPalette::statusForeground},
+    RoleBinding{"shell.status.separator", &ShellPalette::statusSeparator},
+    RoleBinding{"shell.scrollbar.track", &ShellPalette::scrollbarTrack},
+    RoleBinding{"shell.scrollbar.thumb", &ShellPalette::scrollbarThumb},
+    RoleBinding{"shell.scrollbar.thumbHover", &ShellPalette::scrollbarThumbHover},
+    RoleBinding{"shell.control.background", &ShellPalette::controlBackground},
+    RoleBinding{"shell.control.foreground", &ShellPalette::controlForeground},
+    RoleBinding{"shell.control.border", &ShellPalette::controlBorder},
+    RoleBinding{"shell.control.hover", &ShellPalette::controlHover},
+    RoleBinding{"shell.control.pressed", &ShellPalette::controlPressed},
+    RoleBinding{"shell.control.disabledForeground", &ShellPalette::controlDisabledForeground},
+    RoleBinding{"shell.dialog.background", &ShellPalette::dialogBackground},
+    RoleBinding{"shell.dialog.surface", &ShellPalette::dialogSurface},
+    RoleBinding{"shell.dialog.foreground", &ShellPalette::dialogForeground},
+    RoleBinding{"shell.dialog.muted", &ShellPalette::dialogMuted},
+    RoleBinding{"shell.icon.foreground", &ShellPalette::iconForeground},
+    RoleBinding{"shell.icon.muted", &ShellPalette::iconMuted},
+    RoleBinding{"shell.icon.accent", &ShellPalette::iconAccent},
+    RoleBinding{"shell.icon.warning", &ShellPalette::iconWarning},
+    RoleBinding{"shell.icon.error", &ShellPalette::iconError},
+};
 
 [[nodiscard]] std::uint8_t channel(Color color, unsigned int shift) noexcept {
     return static_cast<std::uint8_t>((color >> shift) & 0xFFU);
@@ -38,7 +94,7 @@ ShellPalette deriveShellPalette(const ThemeProfile& profile) noexcept {
     const Color hover = blendColors(editor.surface, editor.accent, profile.dark ? 0.22 : 0.12);
     const Color pressed = blendColors(editor.surface, editor.accent, profile.dark ? 0.34 : 0.22);
 
-    return {
+    ShellPalette palette{
         editor.background,
         editor.surface,
         surfaceSecondary,
@@ -94,6 +150,15 @@ ShellPalette deriveShellPalette(const ThemeProfile& profile) noexcept {
         editor.number,
         editor.string,
     };
+    if (profile.shell) {
+        for (const auto& binding : shellColorRoles) {
+            if (const auto overrideValue = profile.shell->colorOverrides.find(binding.name);
+                overrideValue != profile.shell->colorOverrides.end()) {
+                palette.*(binding.member) = overrideValue->second;
+            }
+        }
+    }
+    return palette;
 }
 
 std::vector<std::string> validateShellPalette(const ShellPalette& palette) {
@@ -115,6 +180,23 @@ std::vector<std::string> validateShellPalette(const ShellPalette& palette) {
         errors.emplace_back("focus ring contrast must be at least 3.0:1");
     }
     return errors;
+}
+
+bool isShellColorRole(std::string_view role) noexcept {
+    return std::any_of(shellColorRoles.begin(), shellColorRoles.end(),
+                       [role](const RoleBinding& binding) { return binding.name == role; });
+}
+
+std::string serializeShellPalette(const ShellPalette& palette) {
+    nlohmann::ordered_json tokens = nlohmann::ordered_json::object();
+    for (const auto& binding : shellColorRoles) {
+        tokens[std::string(binding.name)] = formatHexColor(palette.*(binding.member));
+    }
+    const nlohmann::ordered_json document = {
+        {"contractVersion", 1},
+        {"tokens", std::move(tokens)},
+    };
+    return document.dump(2) + '\n';
 }
 
 } // namespace nppthemes

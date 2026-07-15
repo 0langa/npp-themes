@@ -98,8 +98,11 @@ set_target_properties(NppThemes PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
 
+add_executable(NppThemesConformance tools/shell-conformance.cpp)
+target_link_libraries(NppThemesConformance PRIVATE NppThemesCore)
+
 if(MSVC)
-    foreach(target NppThemesCore NppThemes)
+    foreach(target NppThemesCore NppThemes NppThemesConformance)
         target_compile_options(${target} PRIVATE /W4 /WX /permissive- /utf-8 /EHsc)
     endforeach()
     target_compile_options(NppThemes PRIVATE /guard:cf)
@@ -150,6 +153,8 @@ if(BUILD_TESTING)
     add_test(NAME settings-store COMMAND NppThemesSettingsTests)
     add_test(NAME shell-palette COMMAND NppThemesShellPaletteTests)
     add_test(NAME shell-bridge COMMAND NppThemesShellBridgeTests)
+    add_test(NAME shell-conformance-cli COMMAND NppThemesConformance
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/profile-v2.json")
 endif()
 
 install(TARGETS NppThemes RUNTIME DESTINATION .)

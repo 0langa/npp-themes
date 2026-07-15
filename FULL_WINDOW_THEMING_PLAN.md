@@ -453,6 +453,14 @@ Current work begins here:
 7. Produce `ShellPalette.h/.cpp`, `ShellBridge.h/.cpp`, unit tests, settings round-trip coverage, and user/ADR documentation with strict-warning x64 build plus full local CTest passing.
 8. Fork bootstrap may begin in parallel after the shared-core commit is pinned and Phase 0 temporary sync rehearsal is recorded.
 
+### Implementation ledger — 2026-07-16
+
+- Complete: shared 45-role `ShellPalette`, deterministic v1 derivation, contrast validation, and all six built-in tests.
+- Complete: opt-in transactional DWM title-bar/text/border bridge, High Contrast precedence, settings persistence, Theme Studio state, and restore/failure tests.
+- Complete: canonical profile v2 migration with density, shell typography preferences, safe color overrides, and rejection of unknown/asset-like roles.
+- Complete: standalone `NppThemesConformance` executable and v2 fixture producing canonical cross-host token JSON.
+- Next: expand to the full golden-fixture count, add unknown-field preservation and property/fuzz coverage, then pin the shared-core commit for fork bootstrap.
+
 ## 10. Hard blockers requiring external resources
 
 - Physical Windows ARM64 runtime validation.

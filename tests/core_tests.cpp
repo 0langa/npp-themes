@@ -1,3 +1,4 @@
+#include "nppthemes/ShellPalette.h"
 #include "nppthemes/ThemeProfile.h"
 #include "nppthemes/ThemeXmlCompiler.h"
 
@@ -79,6 +80,28 @@ void testValidationAndImportLimits() {
     check(oversizedRejected, "oversized profile rejected before parsing");
 }
 
+void testProfileV2MigrationAndOverrides() {
+    using namespace nppthemes;
+    const auto source = builtInProfiles().front();
+    const auto migrated = migrateProfileToV2(source);
+    check(migrated.schemaVersion == 2 && migrated.shell.has_value(), "v1 profile migrates to canonical v2 shell");
+    check(deriveShellPalette(migrated) == deriveShellPalette(source), "v1-to-v2 migration preserves derived visuals");
+    check(deserializeProfile(serializeProfile(migrated)) == migrated, "v2 profile JSON round trips");
+
+    auto customized = migrated;
+    customized.shell->density = ShellDensity::Compact;
+    customized.shell->fontFamily = "Segoe UI Variable";
+    customized.shell->fontSizePt = 10;
+    customized.shell->colorOverrides["shell.caption.background"] = 0x202020;
+    const auto roundTripped = deserializeProfile(serializeProfile(customized));
+    check(roundTripped == customized, "v2 shell preferences and overrides round trip");
+    check(deriveShellPalette(roundTripped).captionBackground == 0x202020,
+          "v2 shell color override reaches resolved palette");
+
+    customized.shell->colorOverrides["shell.asset.executable"] = 0xFFFFFF;
+    check(!validateProfile(customized).empty(), "unknown or asset-like shell roles are rejected");
+}
+
 void testSemanticMapping() {
     using namespace nppthemes;
     const auto profile = builtInProfiles().front();
@@ -142,6 +165,7 @@ int main() {
     testColorParsing();
     testBuiltInProfiles();
     testValidationAndImportLimits();
+    testProfileV2MigrationAndOverrides();
     testSemanticMapping();
     testThemeCompiler();
 

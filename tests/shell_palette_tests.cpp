@@ -34,11 +34,27 @@ void testBuiltInShellPalettes() {
     }
 }
 
+void testCanonicalContract() {
+    using namespace nppthemes;
+    auto profile = migrateProfileToV2(builtInProfiles().front());
+    profile.shell->colorOverrides["shell.caption.background"] = 0x010203;
+    const auto palette = deriveShellPalette(profile);
+    check(palette.captionBackground == 0x010203, "profile v2 override replaces derived role");
+    const auto contract = serializeShellPalette(palette);
+    check(contract.find("\"contractVersion\": 1") != std::string::npos, "canonical contract declares its version");
+    check(contract.find("\"shell.caption.background\": \"#010203\"") != std::string::npos,
+          "canonical contract contains normalized override");
+    check(serializeShellPalette(palette) == contract, "canonical shell contract is deterministic");
+    check(isShellColorRole("shell.tab.active"), "known shell role is accepted");
+    check(!isShellColorRole("shell.tab.unknown"), "unknown shell role is rejected");
+}
+
 } // namespace
 
 int main() {
     testBlendBoundaries();
     testBuiltInShellPalettes();
+    testCanonicalContract();
     if (failures == 0) {
         std::cout << "All NppThemes shell palette tests passed\n";
         return 0;

@@ -46,6 +46,7 @@ Disabling the option or choosing **Restore native UI** restores the exact frame 
 - **Export** writes current applied profile as `.npptheme.json`.
 - **Import** accepts validated profile up to 1 MiB and applies it as custom profile.
 - Exported profiles contain no paths or machine identifiers.
+- Schema-v1 profiles remain supported. Schema v2 adds shell density, shell typography preferences, and validated per-role shell colors; see [Profile schema v2](../profile-schema-v2.md).
 
 ### Install XML
 
