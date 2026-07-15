@@ -1,0 +1,33 @@
+.recall/
+.codex_memory/
+
+# Build output
+/build/
+/out/
+/dist/
+/artifacts/
+
+# Visual Studio and CMake user state
+/.vs/
+CMakeUserPresets.json
+*.user
+*.suo
+*.VC.db
+*.VC.VC.opendb
+
+# Compiled output
+*.dll
+*.exe
+*.ilk
+*.lib
+*.obj
+*.pdb
+
+# Test and analysis output
+/coverage/
+/test-results/
+*.log
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
