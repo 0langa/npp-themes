@@ -1,0 +1,83 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 24,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Visual Studio 17 2022",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
+        "BUILD_TESTING": "ON"
+      }
+    },
+    {
+      "name": "x64",
+      "inherits": "base",
+      "architecture": "x64"
+    },
+    {
+      "name": "x86",
+      "inherits": "base",
+      "architecture": "Win32"
+    },
+    {
+      "name": "arm64",
+      "inherits": "base",
+      "architecture": "ARM64"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "x64-debug",
+      "configurePreset": "x64",
+      "configuration": "Debug"
+    },
+    {
+      "name": "x64-release",
+      "configurePreset": "x64",
+      "configuration": "Release"
+    },
+    {
+      "name": "x86-release",
+      "configurePreset": "x86",
+      "configuration": "Release"
+    },
+    {
+      "name": "arm64-release",
+      "configurePreset": "arm64",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "x64-debug",
+      "configurePreset": "x64",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "x64-release",
+      "configurePreset": "x64",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "x86-release",
+      "configurePreset": "x86",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

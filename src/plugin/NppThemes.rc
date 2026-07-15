@@ -1,0 +1,93 @@
+#include <windows.h>
+#include "resource.h"
+
+IDD_THEME_STUDIO DIALOGEX 0, 0, 260, 350
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+EXSTYLE WS_EX_CONTROLPARENT
+CAPTION "NppThemes Theme Studio"
+FONT 9, "Segoe UI"
+BEGIN
+    LTEXT           "Profile", -1, 10, 10, 45, 10
+    COMBOBOX        IDC_PROFILE_COMBO, 10, 22, 156, 120, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Save", IDC_USE_PRESET, 172, 21, 35, 15
+    PUSHBUTTON      "Cancel", IDC_CANCEL_PREVIEW, 211, 21, 37, 15
+
+    GROUPBOX        "Semantic palette", -1, 8, 43, 242, 119
+    LTEXT           "Background", -1, 18, 58, 62, 10
+    PUSHBUTTON      "", IDC_BACKGROUND_COLOR, 88, 54, 68, 17, BS_OWNERDRAW | WS_TABSTOP
+    LTEXT           "Foreground", -1, 18, 82, 62, 10
+    PUSHBUTTON      "", IDC_FOREGROUND_COLOR, 88, 78, 68, 17, BS_OWNERDRAW | WS_TABSTOP
+    LTEXT           "Accent", -1, 18, 106, 62, 10
+    PUSHBUTTON      "", IDC_ACCENT_COLOR, 88, 102, 68, 17, BS_OWNERDRAW | WS_TABSTOP
+    LTEXT           "Keyword", -1, 164, 58, 45, 10
+    PUSHBUTTON      "", IDC_KEYWORD_COLOR, 208, 54, 32, 17, BS_OWNERDRAW | WS_TABSTOP
+    LTEXT           "String", -1, 164, 82, 45, 10
+    PUSHBUTTON      "", IDC_STRING_COLOR, 208, 78, 32, 17, BS_OWNERDRAW | WS_TABSTOP
+    LTEXT           "Comment", -1, 164, 106, 45, 10
+    PUSHBUTTON      "", IDC_COMMENT_COLOR, 208, 102, 32, 17, BS_OWNERDRAW | WS_TABSTOP
+    LTEXT           "Contrast", -1, 18, 135, 50, 10
+    LTEXT           "", IDC_CONTRAST, 88, 135, 150, 10
+
+    GROUPBOX        "Typography", -1, 8, 168, 242, 48
+    LTEXT           "Font", -1, 18, 184, 30, 10
+    EDITTEXT        IDC_FONT_NAME, 50, 181, 135, 15, ES_AUTOHSCROLL | WS_TABSTOP
+    LTEXT           "Size", -1, 194, 184, 25, 10
+    EDITTEXT        IDC_FONT_SIZE, 220, 181, 20, 15, ES_NUMBER | WS_TABSTOP
+    LTEXT           "Changes preview immediately. Apply saves custom profile.", -1, 18, 201, 220, 9
+
+    DEFPUSHBUTTON   "Apply custom profile", IDC_APPLY_CUSTOM, 10, 224, 238, 18
+    PUSHBUTTON      "Import", IDC_IMPORT_THEME, 10, 248, 72, 17
+    PUSHBUTTON      "Export", IDC_EXPORT_THEME, 88, 248, 72, 17
+    PUSHBUTTON      "Install XML", IDC_INSTALL_XML, 166, 248, 82, 17
+
+    GROUPBOX        "Workspace", -1, 8, 272, 242, 69
+    PUSHBUTTON      "Focus", IDC_FOCUS_MODE, 16, 289, 68, 17
+    PUSHBUTTON      "Minimal", IDC_MINIMAL_MODE, 91, 289, 68, 17
+    PUSHBUTTON      "Presentation", IDC_PRESENTATION_MODE, 166, 289, 76, 17
+    PUSHBUTTON      "Restore native UI", IDC_RESTORE_NATIVE, 16, 312, 226, 17
+END
+
+IDD_COMMAND_PALETTE DIALOGEX 0, 0, 360, 235
+STYLE DS_SETFONT | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_CLIPCHILDREN
+EXSTYLE WS_EX_CONTROLPARENT | WS_EX_TOOLWINDOW
+CAPTION "NppThemes Command Palette"
+FONT 10, "Segoe UI"
+BEGIN
+    EDITTEXT        IDC_PALETTE_FILTER, 8, 8, 344, 16, ES_AUTOHSCROLL | WS_TABSTOP
+    LISTBOX         IDC_PALETTE_RESULTS, 8, 30, 344, 166, LBS_NOTIFY | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "Run", IDOK, 260, 208, 44, 17
+    PUSHBUTTON      "Close", IDCANCEL, 308, 208, 44, 17
+END
+
+1 VERSIONINFO
+FILEVERSION @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
+PRODUCTVERSION @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
+FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+FILEFLAGS 0x1L
+#else
+FILEFLAGS 0x0L
+#endif
+FILEOS 0x40004L
+FILETYPE 0x2L
+FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "NppThemes contributors\0"
+            VALUE "FileDescription", "NppThemes Notepad++ plugin\0"
+            VALUE "FileVersion", "@PROJECT_VERSION@\0"
+            VALUE "InternalName", "NppThemes\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 NppThemes contributors\0"
+            VALUE "OriginalFilename", "NppThemes.dll\0"
+            VALUE "ProductName", "NppThemes\0"
+            VALUE "ProductVersion", "@PROJECT_VERSION@\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check C++ formatting
+        run: git ls-files -z '*.cpp' '*.h' '*.hpp' | xargs -0 clang-format --dry-run --Werror
+
+  debug:
+    name: x64 Debug
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake --preset x64
+      - name: Build
+        run: cmake --build --preset x64-debug --parallel
+      - name: Test
+        run: ctest --preset x64-debug
+
+  build:
+    name: ${{ matrix.arch }} Release
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x64
+            run_tests: true
+          - arch: x86
+            run_tests: true
+          - arch: arm64
+            run_tests: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake --preset ${{ matrix.arch }}
+
+      - name: Build
+        run: cmake --build --preset ${{ matrix.arch }}-release --parallel
+
+      - name: Test
+        if: matrix.run_tests
+        run: ctest --test-dir out/build/${{ matrix.arch }} -C Release --output-on-failure
+
+      - name: Package
+        shell: pwsh
+        run: .\tools\package.ps1 -Architecture ${{ matrix.arch }} -Version 0.1.0
+
+      - name: Verify package
+        shell: pwsh
+        run: .\tools\test-package.ps1 -Architecture ${{ matrix.arch }} -Version 0.1.0
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: NppThemes-0.1.0-${{ matrix.arch }}
+          path: artifacts/NppThemes-0.1.0-${{ matrix.arch }}.zip
+          if-no-files-found: error

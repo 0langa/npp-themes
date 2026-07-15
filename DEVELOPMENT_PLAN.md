@@ -1,6 +1,6 @@
 # NppThemes Development Plan
 
-**Status:** Initial plan
+**Status:** 0.1.0 implementation complete; broad 1.0 qualification in progress
 
 **Last updated:** 2026-07-15
 

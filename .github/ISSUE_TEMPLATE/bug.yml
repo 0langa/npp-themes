@@ -1,0 +1,49 @@
+name: Bug report
+description: Report reproducible NppThemes defect
+title: '[Bug] '
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not post sensitive files, credentials, or private document contents.
+  - type: input
+    id: plugin-version
+    attributes:
+      label: NppThemes version
+    validations:
+      required: true
+  - type: input
+    id: npp-version
+    attributes:
+      label: Notepad++ version and architecture
+      placeholder: 8.9.7 x64
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: recovery
+    attributes:
+      label: Recovery attempted
