@@ -14,7 +14,7 @@ jobs:
     name: Format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Check C++ formatting
         run: git ls-files -z '*.cpp' '*.h' '*.hpp' | xargs -0 clang-format --dry-run --Werror
 
@@ -22,7 +22,7 @@ jobs:
     name: x64 Debug
     runs-on: windows-2022
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Configure
         run: cmake --preset x64
       - name: Build
@@ -45,7 +45,7 @@ jobs:
             run_tests: false
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Configure
         run: cmake --preset ${{ matrix.arch }}
@@ -66,7 +66,7 @@ jobs:
         run: .\tools\test-package.ps1 -Architecture ${{ matrix.arch }} -Version 0.1.0
 
       - name: Upload package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: NppThemes-0.1.0-${{ matrix.arch }}
           path: artifacts/NppThemes-0.1.0-${{ matrix.arch }}.zip
