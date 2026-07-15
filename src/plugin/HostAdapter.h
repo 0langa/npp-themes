@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "PluginInterface.h"
+#include "ShellBridge.h"
 #include "WorkspaceState.h"
 #include "nppthemes/ThemeProfile.h"
 
@@ -35,6 +36,9 @@ class HostAdapter {
     [[nodiscard]] bool activateDocument(int view, int index) const noexcept;
 
     void applyProfile(const ThemeProfile& profile);
+    void setShellAppearanceEnabled(bool enabled) noexcept;
+    void applyShellAppearance(const ThemeProfile& profile);
+    [[nodiscard]] bool shellAppearanceActive() const noexcept;
     void restoreEditorAppearance();
     void invalidateSnapshotsForCurrentDocuments();
 
@@ -77,6 +81,8 @@ class HostAdapter {
     [[nodiscard]] static Color fromScintillaColor(int color) noexcept;
 
     NppData data_{};
+    ShellBridge shellBridge_;
+    bool shellAppearanceEnabled_{false};
     std::map<std::string, ViewSnapshot> snapshots_;
 };
 

@@ -1,6 +1,6 @@
 # ADR 0001: Supported plugin boundary
 
-Status: Accepted
+Status: Accepted, amended 2026-07-16
 
 Date: 2026-07-15
 
@@ -19,6 +19,7 @@ Stable releases use only:
 - Public Scintilla messages.
 - Public docking structures from official template.
 - Win32 APIs for plugin-owned windows.
+- Documented DWM attributes on the Notepad++ top-level window only when capability-checked, opt-in, transactionally applied, and exactly restorable during the current process.
 - Documented theme/configuration file formats and host-provided paths.
 
 Stable releases prohibit:
@@ -31,6 +32,7 @@ Stable releases prohibit:
 ## Consequences
 
 - Plugin can modernize editor, plugin surfaces, workflow, and chrome visibility safely.
-- Native application frame keeps Notepad++/Windows visual ownership.
+- Native application frame keeps Notepad++/Windows visual ownership except for documented caption, caption-text, and border color attributes. No custom non-client painting or subclassing is permitted.
+- Windows forced High Contrast overrides NppThemes frame colors.
 - Full frame redesign requires separate maintained Notepad++ fork and separate distribution.
 - Unsupported capabilities appear disabled/explained rather than guessed.

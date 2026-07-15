@@ -40,6 +40,8 @@ class Application {
     [[nodiscard]] const std::vector<ThemeProfile>& profiles() const noexcept;
     [[nodiscard]] ThemeProfile currentProfile() const;
     [[nodiscard]] std::size_t currentProfileIndex() const noexcept;
+    [[nodiscard]] bool windowFrameThemingEnabled() const noexcept;
+    void setWindowFrameThemingEnabled(bool enabled);
     void previewProfile(std::size_t index);
     void cancelPreview();
     void applyCustomProfile(ThemeProfile profile);

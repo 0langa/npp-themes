@@ -14,6 +14,7 @@ struct PersistedSettings {
     std::string activeProfileId{"builtin.northern-lights"};
     std::optional<ThemeProfile> customProfile;
     bool applyOnStartup{true};
+    bool themeWindowFrame{false};
     WorkspaceSession workspace;
 };
 

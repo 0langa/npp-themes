@@ -40,6 +40,7 @@ constexpr std::uintmax_t maxProfileBytes = 1024U * 1024U;
     }
     settings.activeProfileId = document.value("activeProfileId", settings.activeProfileId);
     settings.applyOnStartup = document.value("applyOnStartup", true);
+    settings.themeWindowFrame = document.value("themeWindowFrame", false);
     if (document.contains("customProfile") && !document.at("customProfile").is_null()) {
         settings.customProfile = deserializeProfile(document.at("customProfile").dump());
     }
@@ -106,6 +107,7 @@ bool SettingsStore::save(const PersistedSettings& settings) const {
         {"schemaVersion", 1},
         {"activeProfileId", settings.activeProfileId},
         {"applyOnStartup", settings.applyOnStartup},
+        {"themeWindowFrame", settings.themeWindowFrame},
         {"customProfile", customProfile},
         {"workspace",
          {

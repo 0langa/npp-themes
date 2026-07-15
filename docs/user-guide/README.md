@@ -31,6 +31,16 @@ Built-in profiles:
 
 Built-in presets are immutable. Customization saves as `user.custom`.
 
+### Window frame
+
+Enable **Theme title bar + border** to apply the profile to supported Windows title-bar, caption-text, and border attributes. The adjacent status reads:
+
+- **Off** — opt-in is disabled.
+- **Active** — all supported attributes were captured and applied.
+- **Unavailable** — Windows rejected or does not support an attribute, or forced High Contrast is active. NppThemes fails closed and keeps/restores the native frame.
+
+Disabling the option or choosing **Restore native UI** restores the exact frame values captured in this Notepad++ process. The setting defaults off. It does not custom-paint menus, toolbars, tabs, status bars, or built-in dialogs.
+
 ### Import and export
 
 - **Export** writes current applied profile as `.npptheme.json`.
@@ -67,7 +77,7 @@ Toggle: `Ctrl+Alt+M`.
 
 ### Restore
 
-`Ctrl+Alt+R` restores editor style snapshot and exact menu/toolbar/tab/status visibility captured before workspace profile.
+`Ctrl+Alt+R` restores the editor style snapshot, captured window-frame attributes, and exact menu/toolbar/tab/status visibility captured before workspace profile.
 
 Plugin records workspace state before hiding controls. If Notepad++ terminates before restoration, next startup restores native controls before reapplying normal plugin state.
 
@@ -103,7 +113,7 @@ With Notepad++ closed, replace corrupt `settings.json` with `.bak`, or remove se
 
 ## Known limitations
 
-- Notepad++ title bar and native menu/toolbar/tab rendering are host-owned and not reskinned.
+- The stock plugin can opt-in to documented title-bar, caption-text, and border colors. Native menu/toolbar/tab/status/dialog rendering remains host-owned and is not reskinned.
 - Runtime semantic mapping is richest for common languages; unknown lexers keep existing readable foreground where contrast allows.
 - Generated XML covers every lexer/style present in host model but semantic classification uses style-name heuristics.
 - Font must already be installed. Missing font falls back through Scintilla/Windows.

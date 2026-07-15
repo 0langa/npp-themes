@@ -110,6 +110,9 @@ void ThemeStudio::refresh() {
     ::SendDlgItemMessageW(window_, IDC_PROFILE_COMBO, CB_SETCURSEL, index, 0);
     editedProfile_ = application_.currentProfile();
     loadProfileToControls(editedProfile_);
+    ::CheckDlgButton(window_, IDC_THEME_WINDOW_FRAME,
+                     application_.windowFrameThemingEnabled() ? BST_CHECKED : BST_UNCHECKED);
+    updateShellStatus();
 }
 
 void ThemeStudio::onDarkModeChanged() {
@@ -211,6 +214,10 @@ INT_PTR ThemeStudio::handleMessage(UINT message, WPARAM wParam, LPARAM lParam) {
         case IDC_RESTORE_NATIVE:
             application_.restoreNativeAppearance();
             return TRUE;
+        case IDC_THEME_WINDOW_FRAME:
+            application_.setWindowFrameThemingEnabled(::IsDlgButtonChecked(window_, IDC_THEME_WINDOW_FRAME) ==
+                                                      BST_CHECKED);
+            return TRUE;
         default:
             return FALSE;
         }
@@ -232,6 +239,14 @@ INT_PTR ThemeStudio::handleMessage(UINT message, WPARAM wParam, LPARAM lParam) {
     default:
         return FALSE;
     }
+}
+
+void ThemeStudio::updateShellStatus() {
+    const wchar_t* status = L"Off";
+    if (application_.windowFrameThemingEnabled()) {
+        status = application_.host().shellAppearanceActive() ? L"Active" : L"Unavailable";
+    }
+    ::SetDlgItemTextW(window_, IDC_SHELL_STATUS, status);
 }
 
 void ThemeStudio::populateProfiles() {

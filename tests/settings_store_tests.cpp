@@ -30,6 +30,7 @@ void testSettingsRoundTrip(const std::filesystem::path& root) {
     expected.customProfile = builtInProfiles().at(2);
     expected.customProfile->id = "user.custom";
     expected.applyOnStartup = false;
+    expected.themeWindowFrame = true;
     expected.workspace.active = true;
     expected.workspace.mode = "minimal";
     expected.workspace.previous = {false, true, false, true};
@@ -39,6 +40,7 @@ void testSettingsRoundTrip(const std::filesystem::path& root) {
     check(actual.activeProfileId == expected.activeProfileId, "active profile round trips");
     check(actual.customProfile == expected.customProfile, "custom profile round trips");
     check(actual.applyOnStartup == expected.applyOnStartup, "startup flag round trips");
+    check(actual.themeWindowFrame == expected.themeWindowFrame, "window frame flag round trips");
     check(actual.workspace.active && actual.workspace.mode == "minimal", "workspace session round trips");
     check(actual.workspace.previous.toolbarHidden && actual.workspace.previous.statusbarHidden,
           "workspace prior state round trips");

@@ -4,7 +4,7 @@ NppThemes treats appearance changes as reversible. It does not edit active Notep
 
 ## Emergency UI restore
 
-Press `Ctrl+Alt+R`. This restores the captured editor appearance and the exact menu, toolbar, tabs, and status-bar visibility that existed before a workspace profile was activated.
+Press `Ctrl+Alt+R`. This restores the captured editor appearance, exact DWM window-frame attributes changed by NppThemes, and the menu, toolbar, tabs, and status-bar visibility that existed before a workspace profile was activated.
 
 If Notepad++ terminates while Focus, Minimal, or Presentation is active, the persisted recovery marker is detected on next startup. Native chrome is restored before the normal theme is reapplied.
 
@@ -28,4 +28,4 @@ Generated theme files are new files in the active settings `themes` directory. C
 
 ## Uninstall
 
-Restore native appearance first, exit Notepad++, then remove `plugins\NppThemes`. Plugin-owned configuration may be retained for reinstall or removed separately. No runtime files exist outside the Notepad++ plugin and active settings roots.
+Restore native appearance first, exit Notepad++, then remove `plugins\NppThemes`. If the plugin is removed without restore, no DWM value was written persistently and the next Notepad++ process uses its native frame. Plugin-owned configuration may be retained for reinstall or removed separately. No runtime files exist outside the Notepad++ plugin and active settings roots.

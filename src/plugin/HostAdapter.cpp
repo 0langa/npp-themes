@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "Scintilla.h"
+#include "nppthemes/ShellPalette.h"
 
 namespace nppthemes::plugin {
 namespace {
@@ -46,6 +47,7 @@ namespace {
 
 void HostAdapter::setData(NppData data) noexcept {
     data_ = data;
+    shellBridge_.setHostWindow(data._nppHandle);
 }
 
 HWND HostAdapter::nppHandle() const noexcept {
@@ -263,6 +265,27 @@ void HostAdapter::applyProfile(const ThemeProfile& profile) {
         }
         applyToView(scintilla, language, profile);
     }
+    if (shellAppearanceEnabled_) {
+        applyShellAppearance(profile);
+    }
+}
+
+void HostAdapter::setShellAppearanceEnabled(bool enabled) noexcept {
+    shellAppearanceEnabled_ = enabled;
+    if (!enabled) {
+        shellBridge_.restore();
+    }
+}
+
+void HostAdapter::applyShellAppearance(const ThemeProfile& profile) {
+    if (!shellAppearanceEnabled_) {
+        return;
+    }
+    static_cast<void>(shellBridge_.apply(deriveShellPalette(profile)));
+}
+
+bool HostAdapter::shellAppearanceActive() const noexcept {
+    return shellBridge_.active();
 }
 
 void HostAdapter::restoreEditorAppearance() {
@@ -274,6 +297,7 @@ void HostAdapter::restoreEditorAppearance() {
         }
     }
     snapshots_.clear();
+    shellBridge_.restore();
 }
 
 void HostAdapter::invalidateSnapshotsForCurrentDocuments() {

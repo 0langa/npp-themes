@@ -28,6 +28,7 @@ class ThemeStudio {
     [[nodiscard]] ThemeProfile profileFromControls() const;
     void chooseColor(int controlId, Color& color);
     void updateContrastLabel();
+    void updateShellStatus();
     void drawColorButton(const DRAWITEMSTRUCT& item) const;
 
     Application& application_;

@@ -6,6 +6,8 @@
 
 **Working product name:** NppThemes
 
+**Scope authority:** This remains the stock-plugin plan. Full-window host chrome and maintained-fork development are governed by [FULL_WINDOW_THEMING_PLAN.md](FULL_WINDOW_THEMING_PLAN.md), which supersedes this document only for that scope.
+
 ## 1. Product outcome
 
 NppThemes will make Notepad++ feel coherent, modern, and personal while preserving the speed, reliability, and small footprint that make Notepad++ valuable.

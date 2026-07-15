@@ -53,6 +53,7 @@ set(PUGIXML_BUILD_SAMPLES OFF CACHE INTERNAL "")
 FetchContent_MakeAvailable(pugixml)
 
 add_library(NppThemesCore STATIC
+    src/core/ShellPalette.cpp
     src/core/ThemeProfile.cpp
     src/core/ThemeXmlCompiler.cpp
 )
@@ -66,6 +67,7 @@ add_library(NppThemes SHARED
     src/plugin/HostAdapter.cpp
     src/plugin/PluginMain.cpp
     src/plugin/SettingsStore.cpp
+    src/plugin/ShellBridge.cpp
     src/plugin/ThemeStudio.cpp
     "${CMAKE_CURRENT_BINARY_DIR}/generated/NppThemes.rc"
 )
@@ -79,6 +81,7 @@ target_link_libraries(NppThemes PRIVATE
     NppThemesCore
     Comctl32
     Comdlg32
+    Dwmapi
     Shlwapi
 )
 target_compile_definitions(NppThemes PRIVATE
@@ -109,18 +112,28 @@ if(BUILD_TESTING)
     add_executable(NppThemesHostTests
         tests/host_adapter_tests.cpp
         src/plugin/HostAdapter.cpp
+        src/plugin/ShellBridge.cpp
     )
     add_executable(NppThemesSettingsTests
         tests/settings_store_tests.cpp
         src/plugin/SettingsStore.cpp
     )
+    add_executable(NppThemesShellPaletteTests tests/shell_palette_tests.cpp)
+    target_link_libraries(NppThemesShellPaletteTests PRIVATE NppThemesCore)
+    add_executable(NppThemesShellBridgeTests
+        tests/shell_bridge_tests.cpp
+        src/plugin/ShellBridge.cpp
+    )
+    target_include_directories(NppThemesShellBridgeTests PRIVATE include src/plugin)
+    target_link_libraries(NppThemesShellBridgeTests PRIVATE NppThemesCore Dwmapi User32)
+    target_compile_definitions(NppThemesShellBridgeTests PRIVATE UNICODE _UNICODE WIN32_LEAN_AND_MEAN NOMINMAX)
     target_include_directories(NppThemesHostTests PRIVATE
         include
         src/plugin
         "${npp_sdk_SOURCE_DIR}/src"
         "${npp_sdk_SOURCE_DIR}/src/DockingFeature"
     )
-    target_link_libraries(NppThemesHostTests PRIVATE NppThemesCore User32)
+    target_link_libraries(NppThemesHostTests PRIVATE NppThemesCore Dwmapi User32)
     target_compile_definitions(NppThemesHostTests PRIVATE UNICODE _UNICODE WIN32_LEAN_AND_MEAN NOMINMAX)
     target_include_directories(NppThemesSettingsTests PRIVATE include src/plugin)
     target_link_libraries(NppThemesSettingsTests PRIVATE NppThemesCore)
@@ -129,10 +142,14 @@ if(BUILD_TESTING)
         target_compile_options(NppThemesCoreTests PRIVATE /W4 /WX /permissive- /utf-8 /EHsc)
         target_compile_options(NppThemesHostTests PRIVATE /W4 /WX /permissive- /utf-8 /EHsc)
         target_compile_options(NppThemesSettingsTests PRIVATE /W4 /WX /permissive- /utf-8 /EHsc)
+        target_compile_options(NppThemesShellPaletteTests PRIVATE /W4 /WX /permissive- /utf-8 /EHsc)
+        target_compile_options(NppThemesShellBridgeTests PRIVATE /W4 /WX /permissive- /utf-8 /EHsc)
     endif()
     add_test(NAME core COMMAND NppThemesCoreTests)
     add_test(NAME host-adapter COMMAND NppThemesHostTests)
     add_test(NAME settings-store COMMAND NppThemesSettingsTests)
+    add_test(NAME shell-palette COMMAND NppThemesShellPaletteTests)
+    add_test(NAME shell-bridge COMMAND NppThemesShellBridgeTests)
 endif()
 
 install(TARGETS NppThemes RUNTIME DESTINATION .)

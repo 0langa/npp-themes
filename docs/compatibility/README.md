@@ -13,6 +13,7 @@
 - Runtime theme engine and dark-aware plugin UI target Notepad++ 8.5.4+.
 - `NPPM_GETNPPSETTINGSDIRPATH` is capability-checked; missing support disables one-click XML installation only.
 - Theme Studio docking, modeless keyboard registration, Scintilla styles, and documented chrome visibility use public API.
+- Optional title-bar, caption-text, and border colors use capability-checked documented DWM attributes. Any unsupported read/write fails closed; forced Windows High Contrast disables the feature.
 
 ## Release qualification matrix
 

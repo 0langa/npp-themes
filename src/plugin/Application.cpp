@@ -106,6 +106,9 @@ void Application::onNotification(const SCNotification& notification) noexcept {
             if (commandPalette_) {
                 commandPalette_->onDarkModeChanged();
             }
+            if (ready_ && settings_.applyOnStartup) {
+                host_.applyShellAppearance(currentProfile());
+            }
             break;
         case NPPN_BEFORESHUTDOWN:
         case NPPN_SHUTDOWN:
@@ -131,6 +134,7 @@ void Application::onReady() {
     }
     store_.log(L"NppThemes starting with Notepad++ " + host_.versionString());
     settings_ = store_.load();
+    host_.setShellAppearanceEnabled(settings_.themeWindowFrame);
 
     if (settings_.customProfile) {
         profiles_.push_back(*settings_.customProfile);
@@ -219,6 +223,8 @@ void Application::restoreNativeAppearance() {
     host_.restoreEditorAppearance();
     restoreWorkspaceOnly();
     settings_.applyOnStartup = false;
+    settings_.themeWindowFrame = false;
+    host_.setShellAppearanceEnabled(false);
     persist();
     if (studio_) {
         studio_->refresh();
@@ -259,6 +265,22 @@ ThemeProfile Application::currentProfile() const {
 
 std::size_t Application::currentProfileIndex() const noexcept {
     return currentProfileIndex_;
+}
+
+bool Application::windowFrameThemingEnabled() const noexcept {
+    return settings_.themeWindowFrame;
+}
+
+void Application::setWindowFrameThemingEnabled(bool enabled) {
+    settings_.themeWindowFrame = enabled;
+    host_.setShellAppearanceEnabled(enabled);
+    if (enabled && ready_) {
+        host_.applyShellAppearance(currentProfile());
+    }
+    persist();
+    if (studio_) {
+        studio_->refresh();
+    }
 }
 
 void Application::previewProfile(std::size_t index) {

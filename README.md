@@ -16,6 +16,7 @@ NppThemes is a native appearance and workspace modernization plugin for Notepad+
 - Reversible Focus and Minimal workspace profiles using documented host messages.
 - Searchable command palette for commands, themes, and open documents in both views.
 - Presentation workspace with temporary larger editor typography.
+- Opt-in title-bar, caption-text, and window-border colors through documented DWM attributes, with exact in-process restoration and High Contrast fallback.
 - Exact workspace-state restoration and startup recovery after interrupted sessions.
 - Transactional settings writes with recovery backups.
 - No telemetry, accounts, background network access, or self-updater.
@@ -58,6 +59,7 @@ Plugins Admin distribution follows after public beta compatibility data is suffi
 - Toggle Presentation workspace from command palette or Plugins menu.
 - Restore native editor and UI appearance: `Ctrl+Alt+R`.
 - Select **Install XML** to create a native theme for Notepad++ Style Configurator.
+- Enable **Theme title bar + border** for the supported whole-window frame subset. Theme Studio reports whether it is active.
 
 See [User Guide](docs/user-guide/README.md), including recovery instructions and known limitations.
 Dedicated references: [Recovery and rollback](docs/recovery.md) and [Threat model](docs/threat-model.md).
@@ -80,9 +82,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for prerequisites, architecture, tests, a
 
 ## Design boundary
 
-Stable builds use documented `NPPM_*`, `NPPN_*`, Scintilla, Win32, and theme/configuration contracts only. NppThemes does not subclass private Notepad++ chrome, patch binaries, or send `NPPM_INTERNAL_*` messages. Full title/menu frame replacement would require a separate maintained Notepad++ fork.
+Stable builds use documented `NPPM_*`, `NPPN_*`, Scintilla, DWM, Win32, and theme/configuration contracts only. NppThemes does not subclass private Notepad++ chrome, patch binaries, or send `NPPM_INTERNAL_*` messages. The stock plugin can color supported native frame attributes, but full menu/toolbar/tab/dialog replacement requires the separate maintained shell described in the [full-window roadmap](FULL_WINDOW_THEMING_PLAN.md).
 
-Detailed roadmap and quality gates: [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md).
+Stock-plugin roadmap and quality gates: [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md). Complete-window delivery: [FULL_WINDOW_THEMING_PLAN.md](FULL_WINDOW_THEMING_PLAN.md).
 
 ## License
 
