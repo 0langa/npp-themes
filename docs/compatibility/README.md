@@ -6,7 +6,7 @@
 |---|---:|---:|---:|---|
 | Windows x64 / Notepad++ 8.9.7 | Pass | Pass | Pass | Supported preview |
 | Windows x86 / Notepad++ 8.9.7 | Pass | Pass | Pass | Supported preview |
-| Windows ARM64 | CI target | Cannot run on x64 host | Requires ARM64 hardware | Provisional |
+| Windows ARM64 | Pass on GitHub Windows runner | Cannot run on x64 host | Requires ARM64 hardware | Provisional |
 
 ## Minimum host behavior
 
