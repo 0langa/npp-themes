@@ -469,8 +469,9 @@ Current work begins here:
 - Complete: first fork-owned ThemeService foundation provides validated initialization, atomic preview/apply/cancel, generation-stamped typed subscriptions, and forced High Contrast native fallback. It is compiled into Shell and covered by focused behavior tests.
 - Complete: dedicated [NppThemes Shell CI run](https://github.com/0langa/npp-themes-shell/actions/runs/29503534204) passes contract/service tests and Release compilation for x64, Win32, and ARM64 without publishing unofficial binaries.
 - Deferred hardware gate: physical ARM64 runtime, rendering, DPI, and accessibility validation remain unavailable. ARM64 source compilation is no longer blocked.
-- In progress: reversible host dark-mode palette adapter maps resolved tokens to existing Notepad++ brushes/pens and restores exact native tone/colors for native mode, High Contrast, and deactivation.
-- Next: activate ThemeService and adapter through safe startup profile persistence, then instrument first app-owned surfaces. Expand full golden-fixture count and property/fuzz coverage in parallel.
+- Complete: reversible host dark-mode palette adapter maps resolved tokens to existing Notepad++ brushes/pens and restores exact native tone/colors for native mode, High Contrast, and deactivation.
+- Complete: safe startup persistence uses resolved Notepad++ settings root, bounded regular-file loading, durable pre-mutation crash marker, one-launch native recovery after incomplete apply, runtime adapter activation, and live High Contrast restore/resume.
+- Next: add profile selection/disable UI and coordinate profile mode with host light/dark renderer, then instrument first app-owned surfaces. Expand full golden-fixture count and property/fuzz coverage in parallel.
 
 ## 10. Hard blockers requiring external resources
 
