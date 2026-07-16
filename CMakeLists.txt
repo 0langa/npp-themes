@@ -91,7 +91,7 @@ set_target_properties(NppThemes PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
 
-add_executable(NppThemesConformance tools/shell-conformance.cpp)
+add_executable(NppThemesConformance shared/NppThemesCore/tools/shell-conformance.cpp)
 target_link_libraries(NppThemesConformance PRIVATE NppThemesCore)
 
 if(MSVC)
@@ -146,8 +146,9 @@ if(BUILD_TESTING)
     add_test(NAME settings-store COMMAND NppThemesSettingsTests)
     add_test(NAME shell-palette COMMAND NppThemesShellPaletteTests)
     add_test(NAME shell-bridge COMMAND NppThemesShellBridgeTests)
-    add_test(NAME shell-conformance-cli COMMAND NppThemesConformance
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/profile-v2.json")
+    add_test(NAME shell-conformance-cli COMMAND NppThemesConformance --check
+        "${CMAKE_CURRENT_SOURCE_DIR}/shared/NppThemesCore/tests/fixtures/profile-v2.json"
+        "${CMAKE_CURRENT_SOURCE_DIR}/shared/NppThemesCore/tests/fixtures/profile-v2.expected.json")
 endif()
 
 install(TARGETS NppThemes RUNTIME DESTINATION .)
