@@ -471,7 +471,9 @@ Current work begins here:
 - Deferred hardware gate: physical ARM64 runtime, rendering, DPI, and accessibility validation remain unavailable. ARM64 source compilation is no longer blocked.
 - Complete: reversible host dark-mode palette adapter maps resolved tokens to existing Notepad++ brushes/pens and restores exact native tone/colors for native mode, High Contrast, and deactivation.
 - Complete: safe startup persistence uses resolved Notepad++ settings root, bounded regular-file loading, durable pre-mutation crash marker, one-launch native recovery after incomplete apply, runtime adapter activation, and live High Contrast restore/resume.
-- Next: add profile selection/disable UI and coordinate profile mode with host light/dark renderer, then instrument first app-owned surfaces. Expand full golden-fixture count and property/fuzz coverage in parallel.
+- Complete: top-level NppThemes menu selects all six built-ins or disables custom rendering; changes persist a canonical profile atomically, update status/check state, and remain reversible without restart.
+- Complete: profile mode automatically coordinates Notepad++'s light/dark renderer, forces a full host refresh, yields to High Contrast, restores exact pre-activation renderer state on disable, and reactivates safely after restart. Local focused tests, Release x64/Win32 builds, and x64 live UI/persistence smokes pass.
+- Next: instrument the first app-owned surfaces not covered by the centralized host renderer, beginning with menu/popup ownership and tab/status-specific tokens. Expand full golden-fixture count and property/fuzz coverage in parallel.
 
 ## 10. Hard blockers requiring external resources
 
