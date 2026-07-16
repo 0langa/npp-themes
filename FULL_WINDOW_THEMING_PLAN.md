@@ -463,7 +463,8 @@ Current work begins here:
 - Complete: standalone `NppThemesConformance` executable and v2 fixture producing canonical cross-host token JSON.
 - Complete: public [NppThemes Shell fork](https://github.com/0langa/npp-themes-shell), with `master` reserved as upstream mirror and `shell/main` pinned to official Notepad++ v8.9.7 commit `6634650414ff91220a4c353b7fe5ad741af0f9f9`.
 - Complete: unmodified pinned x64 Release baseline built with VS 2022 17.14/v143 and produced Notepad++ 8.9.7.0.
-- Next: expand the full golden-fixture count, add property/fuzz coverage, import the shared core through a commit-pinned subtree, and qualify x86/ARM64 baselines.
+- Complete: canonical core isolated and imported into the Shell through pinned split `0f272a5e82f272cf5c7bc57fc070befe5efcafea`; it compiles inside the upstream solution with vendored dependencies, strict warnings, and a passing post-integration startup smoke.
+- Next: expand the full golden-fixture count, add property/fuzz coverage and an executable Shell conformance harness, then qualify x86/ARM64 baselines.
 
 ## 10. Hard blockers requiring external resources
 
