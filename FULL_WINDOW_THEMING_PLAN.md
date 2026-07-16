@@ -463,10 +463,14 @@ Current work begins here:
 - Complete: standalone `NppThemesConformance` executable and v2 fixture producing canonical cross-host token JSON.
 - Complete: public [NppThemes Shell fork](https://github.com/0langa/npp-themes-shell), with `master` reserved as upstream mirror and `shell/main` pinned to official Notepad++ v8.9.7 commit `6634650414ff91220a4c353b7fe5ad741af0f9f9`.
 - Complete: unmodified pinned x64 Release baseline built with VS 2022 17.14/v143 and produced Notepad++ 8.9.7.0.
-- Complete: canonical core isolated and imported into the Shell through pinned split `0f272a5e82f272cf5c7bc57fc070befe5efcafea`; it compiles inside the upstream solution with vendored dependencies, strict warnings, and a passing post-integration startup smoke.
+- Complete: canonical core isolated and imported into the Shell through pinned split `fc616dac6242a788cbe260c75232daf0ef30d4ca`; it compiles inside the upstream solution with vendored dependencies and strict warnings.
 - Complete: Shell x64 and Win32 Release builds plus isolated startup smokes pass with the shared core.
-- Blocked locally: ARM64 build workload and physical ARM64 runtime are unavailable; the solution reaches configuration but the required v143 ARM64 compiler/libraries are not installed.
-- Next: expand the full golden-fixture count, add property/fuzz coverage and an executable Shell conformance harness, then begin ThemeService integration while ARM64 qualification remains tracked.
+- Complete: conformance executable and golden fixture now live inside the exported core; both repositories compile the same source and byte-check canonical tokens after CRLF-to-LF checkout normalization.
+- Complete: first fork-owned ThemeService foundation provides validated initialization, atomic preview/apply/cancel, generation-stamped typed subscriptions, and forced High Contrast native fallback. It is compiled into Shell and covered by focused behavior tests.
+- Complete: dedicated [NppThemes Shell CI run](https://github.com/0langa/npp-themes-shell/actions/runs/29503534204) passes contract/service tests and Release compilation for x64, Win32, and ARM64 without publishing unofficial binaries.
+- Deferred hardware gate: physical ARM64 runtime, rendering, DPI, and accessibility validation remain unavailable. ARM64 source compilation is no longer blocked.
+- In progress: reversible host dark-mode palette adapter maps resolved tokens to existing Notepad++ brushes/pens and restores exact native tone/colors for native mode, High Contrast, and deactivation.
+- Next: activate ThemeService and adapter through safe startup profile persistence, then instrument first app-owned surfaces. Expand full golden-fixture count and property/fuzz coverage in parallel.
 
 ## 10. Hard blockers requiring external resources
 
