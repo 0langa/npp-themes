@@ -464,7 +464,9 @@ Current work begins here:
 - Complete: public [NppThemes Shell fork](https://github.com/0langa/npp-themes-shell), with `master` reserved as upstream mirror and `shell/main` pinned to official Notepad++ v8.9.7 commit `6634650414ff91220a4c353b7fe5ad741af0f9f9`.
 - Complete: unmodified pinned x64 Release baseline built with VS 2022 17.14/v143 and produced Notepad++ 8.9.7.0.
 - Complete: canonical core isolated and imported into the Shell through pinned split `0f272a5e82f272cf5c7bc57fc070befe5efcafea`; it compiles inside the upstream solution with vendored dependencies, strict warnings, and a passing post-integration startup smoke.
-- Next: expand the full golden-fixture count, add property/fuzz coverage and an executable Shell conformance harness, then qualify x86/ARM64 baselines.
+- Complete: Shell x64 and Win32 Release builds plus isolated startup smokes pass with the shared core.
+- Blocked locally: ARM64 build workload and physical ARM64 runtime are unavailable; the solution reaches configuration but the required v143 ARM64 compiler/libraries are not installed.
+- Next: expand the full golden-fixture count, add property/fuzz coverage and an executable Shell conformance harness, then begin ThemeService integration while ARM64 qualification remains tracked.
 
 ## 10. Hard blockers requiring external resources
 

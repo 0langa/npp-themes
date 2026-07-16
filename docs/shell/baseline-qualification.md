@@ -21,6 +21,8 @@ The hash identifies this local compiler output only; it is not yet a reproducibi
 
 Canonical NppThemesCore split `0f272a5e82f272cf5c7bc57fc070befe5efcafea` is imported at `PowerEditor/src/NppThemesCore` and compiled directly by the upstream solution using its C++20, warnings-as-errors, nlohmann JSON, and pugixml setup. The first build identified upstream's `PUGIXML_NO_XPATH` configuration; the dependency was removed in canonical source, all plugin core tests passed, the subtree was updated, and Shell x64 Release build plus isolated startup smoke passed.
 
+Win32 Release build and isolated startup smoke also pass with file version 8.9.7.0. ARM64 is blocked before compilation because this machine's VS 2022 v143 installation lacks the ARM64 compiler and libraries. Installing that workload can unblock cross-build; physical ARM64 Windows remains required for runtime qualification.
+
 ### Toolchain note
 
 Visual Studio 18.7 MSBuild was detected first but lacked its native C++ `Microsoft.Cpp.Default.props`; that invocation failed before compilation. Retrying with the documented VS 2022/v143 toolchain passed. Future scripts must discover a VS 2022 instance requiring the VC tools component rather than accepting the newest MSBuild path blindly.
