@@ -388,12 +388,14 @@ Until fork bootstrap, shared code remains here:
 
 ```text
 npp-themes/
-├─ include/nppthemes/
-│  ├─ ThemeProfile.h
-│  └─ ShellPalette.h
-├─ src/core/
-│  ├─ ThemeProfile.cpp
-│  └─ ShellPalette.cpp
+├─ shared/NppThemesCore/
+│  ├─ include/nppthemes/
+│  │  ├─ ThemeProfile.h
+│  │  └─ ShellPalette.h
+│  ├─ src/
+│  │  ├─ ThemeProfile.cpp
+│  │  └─ ShellPalette.cpp
+│  └─ CMakeLists.txt
 ├─ src/plugin/
 │  └─ ShellBridge.*
 ├─ tests/

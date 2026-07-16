@@ -52,14 +52,7 @@ set(PUGIXML_BUILD_TESTS OFF CACHE INTERNAL "")
 set(PUGIXML_BUILD_SAMPLES OFF CACHE INTERNAL "")
 FetchContent_MakeAvailable(pugixml)
 
-add_library(NppThemesCore STATIC
-    src/core/ShellPalette.cpp
-    src/core/ThemeProfile.cpp
-    src/core/ThemeXmlCompiler.cpp
-)
-target_include_directories(NppThemesCore PUBLIC include)
-target_link_libraries(NppThemesCore PUBLIC nlohmann_json::nlohmann_json pugixml::pugixml)
-target_compile_features(NppThemesCore PUBLIC cxx_std_20)
+add_subdirectory(shared/NppThemesCore)
 
 add_library(NppThemes SHARED
     src/plugin/Application.cpp
@@ -102,7 +95,7 @@ add_executable(NppThemesConformance tools/shell-conformance.cpp)
 target_link_libraries(NppThemesConformance PRIVATE NppThemesCore)
 
 if(MSVC)
-    foreach(target NppThemesCore NppThemes NppThemesConformance)
+    foreach(target NppThemes NppThemesConformance)
         target_compile_options(${target} PRIVATE /W4 /WX /permissive- /utf-8 /EHsc)
     endforeach()
     target_compile_options(NppThemes PRIVATE /guard:cf)
