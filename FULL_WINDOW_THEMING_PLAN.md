@@ -473,7 +473,10 @@ Current work begins here:
 - Complete: safe startup persistence uses resolved Notepad++ settings root, bounded regular-file loading, durable pre-mutation crash marker, one-launch native recovery after incomplete apply, runtime adapter activation, and live High Contrast restore/resume.
 - Complete: top-level NppThemes menu selects all six built-ins or disables custom rendering; changes persist a canonical profile atomically, update status/check state, and remain reversible without restart.
 - Complete: profile mode automatically coordinates Notepad++'s light/dark renderer, forces a full host refresh, yields to High Contrast, restores exact pre-activation renderer state on disable, and reactivates safely after restart. Local focused tests, Release x64/Win32 builds, and x64 live UI/persistence smokes pass.
-- Next: instrument the first app-owned surfaces not covered by the centralized host renderer, beginning with menu/popup ownership and tab/status-specific tokens. Expand full golden-fixture count and property/fuzz coverage in parallel.
+- Complete: reversible app-surface state adapter publishes the validated active profile and resolved tokens, clears for native/High Contrast paths, and participates in startup, profile switching, disable, and shutdown restoration.
+- Complete: semantic Scintilla runtime overlay now themes lexer foreground roles, editor typography/background, selection, caret, current line, whitespace, edge, line numbers, and margins. Dedicated main-menu-bar, document-tab, and status-bar consumers use their resolved tokens for both light and dark profiles. High Contrast boundaries force native/custom editor reloads.
+- Verified: focused tests pass, local Release x64/Win32 compile with warnings-as-errors, and live x64 Graphite/Paper/disable/restart checks confirm editor and app-surface changes plus native restoration.
+- Next: dedicated popup-menu ownership, toolbar state/icon adapter, then docking chrome and splitters. Expand full golden-fixture count and property/fuzz coverage in parallel.
 
 ## 10. Hard blockers requiring external resources
 
