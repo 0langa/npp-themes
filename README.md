@@ -80,13 +80,11 @@ Run isolated host smoke test without changing installed Notepad++:
 .\tools\test-portable-host.ps1 -Architecture x64 -Configuration Release
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for prerequisites, architecture, tests, and pull-request gates.
 
 ## Design boundary
 
 Stable builds use documented `NPPM_*`, `NPPN_*`, Scintilla, DWM, Win32, and theme/configuration contracts only. NppThemes does not subclass private Notepad++ chrome, patch binaries, or send `NPPM_INTERNAL_*` messages. The stock plugin can color supported native frame attributes, but full menu/toolbar/tab/dialog replacement requires the separate maintained shell described in the [full-window roadmap](FULL_WINDOW_THEMING_PLAN.md).
 
-Stock-plugin roadmap and quality gates: [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md). Complete-window delivery: [FULL_WINDOW_THEMING_PLAN.md](FULL_WINDOW_THEMING_PLAN.md).
 
 ## License
 
